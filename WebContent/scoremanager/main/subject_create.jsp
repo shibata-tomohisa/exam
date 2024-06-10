@@ -16,8 +16,10 @@
 				<div class="mx-3 py-2">
 					<div class="mb-3">
 						<label class="form-label" for="subject-cd-input"> 科目コード</label>
-						<input class="form-control" type="text" id="subject-cd-input" name="cd"
+						<!-- バグ対応６，７　入力データ制限　半角英数のみに制限　pattern="^[a-zA-Z0-9]+$" -->
+						<input class="form-control" type="text" pattern="^[a-zA-Z0-9]+$" id="subject-cd-input" name="cd"
 							placeholder="科目コードを入力してください" maxlength="3" value="${cd}" required />
+
 						<div class="mt-2 text-warning">${errors.get("cd")}</div>
 					</div>
 					<div class="mb-3">
