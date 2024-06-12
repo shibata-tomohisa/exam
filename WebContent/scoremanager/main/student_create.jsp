@@ -33,6 +33,7 @@
 					</div>
 					<div class="my-3">
 						<label class="form-label" for="student-no-input">学生番号</label>
+						<!-- バグ対応５　入力データ制限　半角英数のみに制限　pattern="^[0-9A-Za-z+$" -->
 						<input class="form-control" type="text" id="student-no-input" name="no"
 							placeholder="学生番号を入力してください" maxlength="10" pattern="^[0-9A-Za-z]+$" value="${no}" required />
 						<div class="mt-2 text-warning">${errors.get("no")}</div>
