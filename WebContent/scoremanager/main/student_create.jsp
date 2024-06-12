@@ -34,7 +34,7 @@
 					<div class="my-3">
 						<label class="form-label" for="student-no-input">学生番号</label>
 						<input class="form-control" type="text" id="student-no-input" name="no"
-							placeholder="学生番号を入力してください" maxlength="10" value="${no}" required />
+							placeholder="学生番号を入力してください" maxlength="10" pattern="^[0-9A-Za-z]+$" value="${no}" required />
 						<div class="mt-2 text-warning">${errors.get("no")}</div>
 					</div>
 					<div class="my-3">
