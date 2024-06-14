@@ -126,7 +126,8 @@
 									<td>${test.student.name}</td>
 									<td>
 										<!-- 登録する得点を学生番号を用いて取得できるようにする -->
-										<input type="number" name="point_${test.student.no}"
+										 <!-- バグ２対応　0～100までの制限を追加　-->
+										<input type="number" name="point_${test.student.no}" max="100" min="0"
 
 											<c:choose>
 												<%-- 入力された得点用マップに現在のstudent.noが含まれている場合 --%>
