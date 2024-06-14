@@ -41,7 +41,8 @@ public class SubjectUpdateExecuteAction extends Action {
 			req.setAttribute("cd", cd);
 			req.setAttribute("name", name);
 			req.setAttribute("errors", errors);
-			req.getRequestDispatcher("error.jsp").forward(req, res);
+		//バグ対応１　error.jspへのリンクミス　指定URLを変更(error.jsp⇒../../error.jsp)
+			req.getRequestDispatcher("../../error.jsp").forward(req, res);
 		} else {
 			// 科目の更新を実行して科目更新完了画面へ遷移
 			subject.setName(name);

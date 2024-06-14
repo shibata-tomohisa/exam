@@ -127,6 +127,7 @@
 									<td>
 										<!-- 登録する得点を学生番号を用いて取得できるようにする -->
 										<input type="number" name="point_${test.student.no}"
+
 											<c:choose>
 												<%-- 入力された得点用マップに現在のstudent.noが含まれている場合 --%>
 												<c:when test="${input_points.containsKey(test.student.no)}">

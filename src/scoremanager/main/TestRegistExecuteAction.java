@@ -126,7 +126,8 @@ public class TestRegistExecuteAction extends Action {
 		if (errors.size() > 0) {
 			// エラーが発生していた場合
 			req.setAttribute("errors", errors);
-			req.getRequestDispatcher("error.jsp").forward(req, res);
+		//バグ対応１　error.jspへのリンクミス　指定URLを変更(error.jsp⇒../../error.jsp)
+			req.getRequestDispatcher("../../error.jsp").forward(req, res);
 		} else {
 			// 正常終了時の処理
 
