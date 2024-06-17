@@ -64,7 +64,8 @@ public class StudentTestListAction extends Action {
 		} else {
 			errors.put("filter", "入学年度とクラスと科目を選択してください");
 			req.setAttribute("errors", errors);
-			req.getRequestDispatcher("error.jsp").forward(req, res);
+			//バグ対応１　error.jspへのリンクミス　URLを絶対アドレスへ変更(error.jsp⇒/error.jsp)
+			req.getRequestDispatcher("/error.jsp").forward(req, res);
 		}
 		// リクエストに学生をセット
 		req.setAttribute("student", student);

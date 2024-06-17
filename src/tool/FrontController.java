@@ -29,8 +29,8 @@ public class FrontController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 			// エラーページへリダイレクト
-			//バグ対応１　error.jspへのリンクミス　指定URLを変更(error.jsp⇒../error.jsp)
-			req.getRequestDispatcher("../error.jsp").forward(req, res);
+			//バグ対応１　error.jspへのリンクミス　URLを絶対アドレスへ変更(error.jsp⇒/error.jsp)
+			req.getRequestDispatcher("/error.jsp").forward(req, res);
 		}
 	}
 
