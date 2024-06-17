@@ -11,11 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import bean.Student;
+import bean.Subject;//バグ対応３　test_list_filter.jspを読み込む際のリストセット不足　必要コードを追加
 import bean.Teacher;
 import bean.TestListStudent;
 import dao.ClassNumDao;
 import dao.StudentDao;
-import dao.SubjectDao;
+import dao.SubjectDao;//バグ対応３　test_list_filter.jspを読み込む際のリストセット不足　必要コードを追加
 import dao.TestListStudentDao;
 import tool.Action;
 
@@ -30,6 +31,18 @@ public class StudentTestListAction extends Action {
 		Teacher teacher = (Teacher) session.getAttribute("user");// ログインユーザーを取得
 		LocalDate todaysDate = LocalDate.now();// LcalDateインスタンスを取得
 		int year = todaysDate.getYear();// 現在の年を取得
+
+//バグ対応３　test_list_filter.jspを読み込む際のリストセット不足　必要コードを追加
+//SubjectTestListActionからコピペして追加　--- ここから ---
+		int entYear = 0; // 入学年度
+		String entYearStr = null; // 入学年度文字列
+		String classNum = null; // クラス番号
+		String subjectCd = null; //科目番号
+		SubjectDao subjectDao = new SubjectDao(); //科目Dao
+		Subject subject = null; //科目
+// --- ここまで ---
+
+
 		List<Integer> entYearSet = new ArrayList<>();// 入学年度のリストを初期化
 		List<Integer> numSet = new ArrayList<>();// テストの回数リストを初期化
 		Map<String, String> errors = new HashMap<>(); //エラーメッセージ文字列
@@ -47,8 +60,32 @@ public class StudentTestListAction extends Action {
 		// なし
 
 		// DBからデータ取得 3
+//バグ対応３　test_list_filter.jspを読み込む際のリストセット不足　必要コードを追加
+// SubjectTestListActionからコピペして追加　--- ここから ---
+		List<String> list = cNumDao.filter(teacher.getSchool());//クラス番号の一覧を取得
+		List<Subject> subjects = sDao.filter(teacher.getSchool());//科目の一覧を取得
+
 		// ビジネスロジック 4
+		for (int i = year - 10; i < year + 10; i++) {
+			entYearSet.add(i);
+		}
+		// 全2回分のテスト回数をリストに追加
+		for (int i = 1; i <= 2; i++) {
+			numSet.add(i);
+		}
 		// レスポンス値をセット 6
+		req.setAttribute("f1", entYear);
+		// クラス番号
+		req.setAttribute("f2", classNum);
+		// 科目コード
+		req.setAttribute("f3", subjectCd);
+		req.setAttribute("class_num_set", list);//クラス番号の一覧をセット
+		req.setAttribute("ent_year_set", entYearSet);//入学年度のリストをセット
+		req.setAttribute("subjects", subjects);//科目の一覧をセット
+		req.setAttribute("num_set", numSet);//テストの回数リストをセット
+// --- ここまで ---
+
+
 		// 状況によって分岐
 		if (studentNo != null) {
 			// リクエストパラメーターが存在している場合学生番号から学生情報を取得
