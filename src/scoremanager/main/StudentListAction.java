@@ -61,7 +61,7 @@ public class StudentListAction extends Action {
 			// リクエストに在学フラグをセット
 			req.setAttribute("f3", isAttendStr);
 		}
-        //バグ対応3ここまで
+		//バグ対応3ここまで
 
 		if (entYear != 0 && !classNum.equals("0")) {
 			// 入学年度とクラス番号を指定
