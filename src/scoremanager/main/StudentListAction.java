@@ -41,6 +41,9 @@ public class StudentListAction extends Action {
 		classNum = req.getParameter("f2");
 		isAttendStr = req.getParameter("f3");
 
+
+
+
 		//DBからデータ取得 3
 		// ログインユーザーの学校コードをもとにクラス番号の一覧を取得
 		List<String> list = cNumDao.filter(teacher.getSchool());
@@ -50,6 +53,15 @@ public class StudentListAction extends Action {
 			// 数値に変換
 			entYear = Integer.parseInt(entYearStr);
 		}
+		// バグ対応3ここから
+		// 在学フラグが送信されていた場合
+		if (isAttendStr != null) {
+			// 在学フラグを立てる
+			isAttend = true;
+			// リクエストに在学フラグをセット
+			req.setAttribute("f3", isAttendStr);
+		}
+        //バグ対応3ここまで
 
 		if (entYear != 0 && !classNum.equals("0")) {
 			// 入学年度とクラス番号を指定
@@ -87,13 +99,16 @@ public class StudentListAction extends Action {
 		req.setAttribute("f1", entYear);
 		// リクエストにクラス番号をセット
 		req.setAttribute("f2", classNum);
+
+		//在学フラグが送信されていた場合の処理を上に移動
 		// 在学フラグが送信されていた場合
-		if (isAttendStr != null) {
-			// 在学フラグを立てる
-			isAttend = true;
-			// リクエストに在学フラグをセット
-			req.setAttribute("f3", isAttendStr);
-		}
+//		if (isAttendStr != null) {
+//			// 在学フラグを立てる
+//			isAttend = true;
+//			// リクエストに在学フラグをセット
+//			req.setAttribute("f3", isAttendStr);
+//		}
+
 		// リクエストに学生リストをセット
 		req.setAttribute("students", students);
 		// リクエストにデータをセット
