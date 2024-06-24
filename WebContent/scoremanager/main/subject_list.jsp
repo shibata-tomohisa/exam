@@ -15,22 +15,43 @@
 			<div class="my-2 text-end px-4">
 				<a href="SubjectCreate.action">新規登録</a>
 			</div>
-			<table class="table table-hover">
-				<tr>
-					<th>科目コード</th>
-					<th>科目名</th>
-					<th></th>
-					<th></th>
-				</tr>
-				<c:forEach var="subject" items="${subjects}">
-					<tr>
-						<td>${subject.cd}</td>
-						<td>${subject.name}</td>
-						<td><a href="SubjectUpdate.action?cd=${subject.cd}&name=${subject.name}">変更</a></td>
-						<td><a href="SubjectDelete.action?cd=${subject.cd}&name=${subject.name}">削除</a></td>
-					</tr>
-				</c:forEach>
-			</table>
+	<%-- 機能追加１　科目検索のためのコード追加/修正　-----ここから----- --%>
+			<c:import url="subject_list_filter.jsp" />
+			<% String f1 = (String)request.getAttribute("f1");
+			   String f2 = (String)request.getAttribute("f2");
+			%>
+			 <c:if test="${!empty f1 or !empty f2}">
+				<div class="row border mx-3 mb-3 py-2 align-items-center rounded">
+				<div>【検索条件】　　科目コード：<%=f1 %>　　科目名：<%=f2 %>　　　検索結果：${subjects.size()}件</div>
+				</div>
+			</c:if>
+
+			<c:choose>
+				<c:when test="${subjects.size()>0}">
+
+					<table class="table table-hover">
+						<tr>
+							<th>科目コード</th>
+							<th>科目名</th>
+							<th></th>
+							<th></th>
+						</tr>
+						<c:forEach var="subject" items="${subjects}">
+							<tr>
+								<td>${subject.cd}</td>
+								<td>${subject.name}</td>
+								<td><a href="SubjectUpdate.action?cd=${subject.cd}&name=${subject.name}">変更</a></td>
+								<td><a href="SubjectDelete.action?cd=${subject.cd}&name=${subject.name}">削除</a></td>
+							</tr>
+						</c:forEach>
+					</table>
+				</c:when>
+				<c:otherwise>
+					<div>条件に合致する科目はありません</div>
+				</c:otherwise>
+			</c:choose>
+	<%-- -----ここまで----- --%>
+
 		</section>
 	</c:param>
 </c:import>

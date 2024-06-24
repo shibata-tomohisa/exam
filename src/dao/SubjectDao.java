@@ -132,6 +132,111 @@ public class SubjectDao extends Dao {
 		return list;
 	}
 
+//機能追加１　科目検索のための追加コード　-----ここから-----　　
+	/** -------------------------------------------------------------------------------------
+	 * filterメソッド２ キーワードを取得して検索し一覧を取得する
+	 *
+	 * @param school:School
+	 *
+	 * @param codeStr:String
+	 *
+	 * @param subName:String
+	 *
+	 * @param sameAll:boolean
+	 *            完全一致フラグ
+	 * @return 科目のリスト:List<Subject> 存在しない場合は0件のリスト
+	 * @throws Exception
+	 */
+
+	public List<Subject> filter_search(School school, String codeStr, String subName,boolean sameAll) throws Exception {
+		// リストを初期化
+		List<Subject> list = new ArrayList<>();
+		// コネクションを確立
+		Connection connection = getConnection();
+		// プリペアードステートメント
+		PreparedStatement statement = null;
+
+		// SQL文の条件
+		String order = " order by cd asc";
+		//ベースのSQL：学校コードから科目一覧取得
+		String baseSql ="select * from subject where school_cd=? ";
+
+		//以下、科目検索のための追加SQL
+		String and = "";
+		if (!codeStr.equals("") || !subName.equals("")){
+			and = "and ";
+		}
+		//科目コード検索
+		String CodeSearch = "";
+		if (!codeStr.equals("")){
+			//大文字小文字の区別なしに検索
+			// 完全一致フラグがtrueの場合は分岐
+			if (sameAll) {
+				CodeSearch = "LOWER(cd) like LOWER('" + codeStr + "') ";
+			} else {
+				CodeSearch = "LOWER(cd) like LOWER('%" + codeStr + "%') ";
+			}
+		}
+
+		//科目名検索
+		String NameSearch = "";
+		if (!subName.equals("")){
+			//大文字小文字の区別なしに検索
+			// 完全一致フラグがtrueの場合は分岐
+			if (sameAll) {
+				NameSearch = "LOWER(name) like LOWER('" + subName + "') ";
+			} else {
+				NameSearch = "LOWER(name) like LOWER('%" + subName + "%') ";
+			}
+		}
+		//コードも科目名も検索するときはandが必要
+		String Double_cdonditions = "";
+		if (!codeStr.equals("") && !subName.equals("")){
+			Double_cdonditions = "and ";
+		}
+
+		try {
+			// プリペアードステートメントにSQL文をセット
+			statement = connection.prepareStatement(baseSql + and + CodeSearch + Double_cdonditions + NameSearch + order);
+			statement.setString(1, school.getCd());
+			// プリペアードステートメントを実行
+			ResultSet rSet = statement.executeQuery();
+			// リザルトセットを全件走査
+			while (rSet.next()) {
+				// 科目インスタンスの初期化
+				Subject subject = new Subject();
+				// 科目インスタンスに値をセット
+				subject.setCd(rSet.getString("cd"));
+				subject.setName(rSet.getString("name"));
+				// リストに追加
+				list.add(subject);
+				}
+
+		} catch (Exception e) {
+			throw e;
+		} finally {
+			// プリペアードステートメントを閉じる
+			if (statement != null) {
+				try {
+					statement.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+			// コネクションを閉じる
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException sqle) {
+					throw sqle;
+				}
+			}
+		}
+
+		return list;
+	}
+// -----ここまで--------------------------------------------------------------------------
+
 	/**
 	 * saveメソッド 科目インスタンスをデータベースに保存する データが存在する場合は更新、存在しない場合は登録
 	 *
